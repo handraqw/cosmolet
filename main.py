@@ -1,7 +1,6 @@
 import pygame
 import random
 
-# Настройки окна
 WIDTH, HEIGHT = 640, 480
 
 pygame.init()
@@ -26,7 +25,6 @@ class Ship:
         self.x = min(max(self.x + dx, self.size//2), WIDTH - self.size//2)
 
     def draw(self):
-        # Треугольник
         points = [
             (self.x, self.y - self.size//2),
             (self.x - self.size//2, self.y + self.size//2),
@@ -94,23 +92,19 @@ def main():
             if keys[pygame.K_RIGHT]:
                 ship.move(7)
 
-        # Меториты появляются
         spawn_counter += 1
         if ship.alive and spawn_counter > 25:
             meteors.append(Meteor())
             spawn_counter = 0
 
-        # Движение и удаление пуль
         for b in bullets:
             b.move()
         bullets[:] = [b for b in bullets if b.y > -20]
 
-        # Движение и удаление метеоров
         for m in meteors:
             m.move()
         meteors[:] = [m for m in meteors if m.y < HEIGHT + m.radius]
 
-        # Проверка столкновений пуля/метеорит
         for b in bullets[:]:
             for m in meteors[:]:
                 if b.rect().colliderect(m.rect()):
@@ -120,13 +114,11 @@ def main():
                     except ValueError:
                         pass
 
-        # Проверка столкновения корабля и метеора
         if ship.alive:
             for m in meteors:
                 if ship.rect().colliderect(m.rect()):
                     ship.alive = False
 
-        # Рисуем всё
         if ship.alive:
             ship.draw()
         else:
